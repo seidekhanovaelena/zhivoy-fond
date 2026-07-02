@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Живой фонд — помощь, которую можно сверить до копейки</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F0E4;
+    --bg-paper: #FCFAF3;
+    --ink: #16233F;
+    --ink-soft: #55607A;
+    --accent: #9C6B2E;
+    --accent-deep: #6E4A1E;
+    --verified: #1F6F5C;
+    --line: #DCD5C4;
+    --red: #9C3A3A;
+
+    --font-head: 'Source Serif 4', serif;
+    --font-body: 'Public Sans', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  img, svg { display: block; max-width: 100%; }
+
+  .container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-head);
+    font-weight: 600;
+    margin: 0 0 16px;
+    color: var(--ink);
+  }
+
+  p { margin: 0 0 16px; color: var(--ink-soft); }
+
+  a { color: inherit; }
+
+  .num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: 6px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: transform .15s ease, background-color .15s ease, box-shadow .15s ease;
+    text-decoration: none;
+  }
+  .btn:active { transform: translateY(1px); }
+
+  .btn-primary {
+    background: var(--ink);
+    color: var(--bg-paper);
+  }
+  .btn-primary:hover { background: #0f1930; box-shadow: 0 6px 16px rgba(22,35,63,.25); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--ink);
+  }
+  .btn-ghost:hover { background: rgba(22,35,63,.06); }
+
+  .btn-accent {
+    background: var(--accent);
+    color: var(--bg-paper);
+  }
+  .btn-accent:hover { background: var(--accent-deep); box-shadow: 0 6px 16px rgba(156,107,46,.3); }
+
+  .btn-small { padding: 10px 18px; font-size: 14px; }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+
+  /* ---------- Header ---------- */
+  header.site {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: rgba(245,240,228,.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 19px;
+  }
+  .brand .stamp { width: 28px; height: 28px; }
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav-links a {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-soft);
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta { display: flex; }
+  .nav-toggle { display: none; }
+
+  /* ---------- Reveal animation ---------- */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    [data-reveal] { opacity: 1; transform: none; transition: none; }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    padding: 88px 0 64px;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr .85fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--verified);
+    background: rgba(31,111,92,.08);
+    border: 1px solid rgba(31,111,92,.25);
+    padding: 6px 12px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: clamp(32px, 4.2vw, 48px);
+    line-height: 1.12;
+    max-width: 15ch;
+  }
+  .hero .lede {
+    font-size: 18px;
+    max-width: 46ch;
+    color: var(--ink-soft);
+  }
+  .hero-actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+
+  .totals-card {
+    background: var(--bg-paper);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 32px;
+    box-shadow: 0 20px 40px rgba(22,35,63,.08);
+  }
+  .totals-card .stamp-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+  }
+  .totals-card .stamp { width: 44px; height: 44px; }
+  .totals-label {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .totals-amount {
+    font-family: var(--font-mono);
+    font-size: clamp(32px, 4vw, 42px);
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 22px;
+  }
+  .totals-amount span { color: var(--ink-soft); font-size: .55em; font-weight: 500; }
+  .totals-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    border-top: 1px dashed var(--line);
+    padding-top: 18px;
+  }
+  .totals-meta div .num { display: block; font-size: 20px; font-weight: 600; }
+  .totals-meta div .meta-label { font-size: 12.5px; color: var(--ink-soft); }
+
+  /* ---------- Verification stamp ---------- */
+  .stamp circle { fill: none; stroke: var(--verified); }
+  .stamp path { stroke: var(--verified); fill: none; }
+
+  /* ---------- Section shell ---------- */
+  section { padding: 76px 0; }
+  .section-head {
+    max-width: 60ch;
+    margin-bottom: 44px;
+  }
+  .section-kicker {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--accent);
+    margin-bottom: 10px;
+    display: block;
+  }
+  .section-head h2 { font-size: clamp(26px, 3vw, 34px); }
+
+  /* ---------- About ---------- */
+  .about {
+    background: var(--bg-paper);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+  .quote-block {
+    border-left: 3px solid var(--accent);
+    padding: 6px 0 6px 22px;
+    margin: 24px 0;
+  }
+  .quote-block p {
+    font-family: var(--font-head);
+    font-size: 21px;
+    font-style: italic;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .quote-block cite {
+    font-style: normal;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .report-note {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px;
+  }
+  .report-note .stamp { width: 30px; height: 30px; flex-shrink: 0; }
+  .report-note p { margin: 0; font-size: 14.5px; }
+
+  .pillars { display: grid; gap: 18px; }
+  .pillar {
+    display: flex;
+    gap: 14px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px;
+  }
+  .pillar .idx {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 14px;
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+  }
+  .pillar h3 { font-size: 16px; margin-bottom: 4px; }
+  .pillar p { font-size: 14.5px; margin: 0; }
+
+  /* ---------- Projects ---------- */
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  .project-card {
+    background: var(--bg-paper);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+  }
+  .project-card h3 { font-size: 19px; margin-bottom: 8px; }
+  .project-card .desc { font-size: 14.5px; margin-bottom: 20px; flex-grow: 1; }
+  .project-figures {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  .project-figures .raised { color: var(--ink); font-weight: 600; }
+  .project-figures .goal { color: var(--ink-soft); }
+  .progress-track {
+    height: 8px;
+    background: var(--line);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--verified);
+    border-radius: 999px;
+    width: 0;
+    transition: width 1s ease;
+  }
+  .project-pct { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-soft); margin-bottom: 18px; }
+  .project-card .btn { align-self: flex-start; }
+
+  /* ---------- Expense table ---------- */
+  .ledger {
+    background: var(--bg-paper);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 36px;
+  }
+  .ledger-row {
+    display: flex;
+    align-items: baseline;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+    gap: 12px;
+  }
+  .ledger-row:last-of-type { border-bottom: none; }
+  .ledger-label {
+    font-weight: 600;
+    white-space: nowrap;
+    font-size: 16px;
+  }
+  .ledger-dots {
+    flex-grow: 1;
+    border-bottom: 2px dotted var(--line);
+    height: 0;
+    margin-bottom: 6px;
+  }
+  .ledger-value {
+    font-family: var(--font-mono);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--accent-deep);
+    white-space: nowrap;
+  }
+  .ledger-note {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--line);
+    font-size: 14.5px;
+  }
+
+  /* ---------- How to help ---------- */
+  .help-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  .help-card {
+    background: var(--bg-paper);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+  }
+  .help-tag {
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: var(--verified);
+    background: rgba(31,111,92,.08);
+    border: 1px solid rgba(31,111,92,.25);
+    padding: 4px 10px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+  .help-card h3 { font-size: 18px; margin-bottom: 8px; }
+  .help-card p { font-size: 14.5px; flex-grow: 1; }
+
+  /* ---------- Footer ---------- */
+  footer.site {
+    background: var(--ink);
+    color: #C7CEDD;
+    padding: 56px 0 32px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+  footer.site h3 {
+    color: #fff;
+    font-size: 15px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+  footer.site .brand { color: #fff; }
+  footer.site p { color: #9AA4BD; font-size: 14px; }
+  footer.site .stamp circle, footer.site .stamp path { stroke: #6FB6A4; }
+  .footer-links { list-style: none; padding: 0; margin: 0; }
+  .footer-links li { margin-bottom: 8px; }
+  .footer-links a { color: #C7CEDD; text-decoration: none; font-size: 14px; }
+  .footer-links a:hover { text-decoration: underline; }
+
+  .age-gate {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 24px;
+    transition: box-shadow .3s ease, border-color .3s ease;
+  }
+  .age-gate.attn {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(156,58,58,.25);
+  }
+  .age-gate input { margin-top: 3px; width: 16px; height: 16px; flex-shrink: 0; }
+  .age-gate label { font-size: 13.5px; color: #C7CEDD; }
+
+  .disclaimer {
+    border-top: 1px solid rgba(255,255,255,.12);
+    padding-top: 24px;
+    font-size: 12.5px;
+    color: #7D879F;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  /* ---------- Modal ---------- */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(22,35,63,.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 100;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--bg-paper);
+    border-radius: 14px;
+    max-width: 420px;
+    width: 100%;
+    padding: 30px;
+    position: relative;
+    box-shadow: 0 30px 60px rgba(0,0,0,.3);
+  }
+  .modal .stamp { width: 40px; height: 40px; margin-bottom: 16px; }
+  .modal h3 { font-size: 20px; margin-bottom: 10px; }
+  .modal p { font-size: 14.5px; }
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    width: 30px; height: 30px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--ink-soft);
+    line-height: 1;
+  }
+  .modal-close:hover { background: var(--bg); }
+  .modal-actions { margin-top: 20px; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 760px) {
+    .nav-links, .nav-cta { display: none; }
+    .nav-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px; height: 38px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: transparent;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    header.site.menu-open .nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: absolute;
+      top: 100%; left: 0; right: 0;
+      background: var(--bg-paper);
+      border-bottom: 1px solid var(--line);
+      padding: 12px 24px 20px;
+    }
+    header.site.menu-open .nav-links a { padding: 10px 0; }
+    header.site.menu-open .nav-cta { display: flex; padding: 0 24px 20px; }
+
+    .hero { padding: 48px 0 40px; }
+    .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+    .hero h1 { max-width: none; }
+
+    section { padding: 52px 0; }
+    .about-grid { grid-template-columns: 1fr; gap: 32px; }
+    .project-grid { grid-template-columns: 1fr; }
+    .help-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+    .ledger { padding: 24px; }
+    .ledger-label { font-size: 14.5px; }
+    .ledger-value { font-size: 17px; }
+    .totals-meta { grid-template-columns: 1fr 1fr; }
+    .disclaimer { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Reusable verification stamp -->
+<template id="stamp-svg">
+  <svg class="stamp" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <circle cx="24" cy="24" r="21" stroke-width="2"/>
+    <circle cx="24" cy="24" r="16" stroke-width="1.5"/>
+    <path d="M16 24.5L21 29.5L32.5 18" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</template>
+
+<header class="site" id="siteHeader">
+  <div class="container nav">
+    <a href="#top" class="brand"><span class="stamp-slot"></span>Живой фонд</a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#about">О фонде</a></li>
+        <li><a href="#projects">Проекты</a></li>
+        <li><a href="#ledger">Куда идут деньги</a></li>
+        <li><a href="#help">Как помочь</a></li>
+      </ul>
+    </nav>
+    <div class="nav-cta">
+      <button class="btn btn-primary btn-small" data-open-modal="donate">Поддержать</button>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Открыть меню">☰</button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- 1. HERO -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div data-reveal>
+        <span class="eyebrow">Прототип · демо-переводы</span>
+        <h1>Помощь, которую можно сверить до копейки</h1>
+        <p class="lede">«Живой фонд» показывает полный путь пожертвования — от перевода до конкретного результата. Проверенные партнёры, квартальная отчётность и минимум административных расходов.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" data-open-modal="donate">Поддержать проект</button>
+          <a href="#ledger" class="btn btn-ghost">Посмотреть, куда идут деньги</a>
+        </div>
+      </div>
+
+      <div class="totals-card" data-reveal>
+        <div class="stamp-row">
+          <div>
+            <div class="totals-label">Собрано всего</div>
+          </div>
+          <span class="stamp-slot"></span>
+        </div>
+        <div class="totals-amount num" id="totalAmount">0<span> ₽</span></div>
+        <div class="totals-meta">
+          <div>
+            <span class="num" id="totalDonors">0</span>
+            <span class="meta-label">пожертвований</span>
+          </div>
+          <div>
+            <span class="num">92%</span>
+            <span class="meta-label">идёт напрямую на помощь</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. О ФОНДЕ -->
+  <section class="about" id="about">
+    <div class="container about-grid">
+      <div data-reveal>
+        <span class="section-kicker">О фонде</span>
+        <h2>Кто мы и как работаем</h2>
+        <p>«Живой фонд» — открытая платформа, которая объединяет людей, готовых помочь, с проверенными партнёрами на местах: НКО и волонтёрскими группами, которые уже ведут работу по конкретным направлениям.</p>
+        <p>Мы не собираем деньги «в общий котёл». Каждое пожертвование привязано к конкретной цели, а каждая цель — к отчёту о том, что было сделано.</p>
+        <div class="quote-block">
+          <p>«Доверие строится не на обещаниях, а на цифрах, которые можно проверить.»</p>
+          <cite>— принцип работы фонда</cite>
+        </div>
+      </div>
+      <div data-reveal>
+        <div class="pillars">
+          <div class="pillar">
+            <span class="idx">1</span>
+            <div>
+              <h3>Проверенные партнёры</h3>
+              <p>Каждое направление курирует организация или волонтёрская группа на месте — мы не работаем напрямую с частными лицами.</p>
+            </div>
+          </div>
+          <div class="pillar">
+            <span class="idx">2</span>
+            <div>
+              <h3>Полная отчётность</h3>
+              <p>Суммы, даты и результаты публикуются в квартальных отчётах — без исключений.</p>
+            </div>
+          </div>
+          <div class="pillar">
+            <span class="idx">3</span>
+            <div>
+              <h3>Минимум административных расходов</h3>
+              <p>Прозрачное распределение: 92% на помощь, 5% на логистику, 3% на администрирование.</p>
+            </div>
+          </div>
+        </div>
+        <div class="report-note" style="margin-top:18px;">
+          <span class="stamp-slot"></span>
+          <p>Следующий квартальный отчёт публикуется в начале каждого квартала и доступен для скачивания в разделе отчётности.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. ТЕКУЩИЕ ПРОЕКТЫ -->
+  <section id="projects">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <span class="section-kicker">Текущие проекты</span>
+        <h2>Куда можно направить помощь сейчас</h2>
+      </div>
+      <div class="project-grid">
+
+        <article class="project-card" data-reveal>
+          <h3>Тёплый дом</h3>
+          <p class="desc">Ремонт кровли и утепление жилья в посёлках, пострадавших от весеннего паводка. Работы ведёт местная строительная бригада-партнёр.</p>
+          <div class="project-figures">
+            <span class="raised num">318 400 ₽</span>
+            <span class="goal num">из 450 000 ₽</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" data-pct="71"></div></div>
+          <div class="project-pct num">71% собрано</div>
+          <button class="btn btn-accent btn-small" data-open-modal="donate">Поддержать</button>
+        </article>
+
+        <article class="project-card" data-reveal>
+          <h3>Первая помощь</h3>
+          <p class="desc">Оснащение медицинскими укладками и расходными материалами трёх фельдшерских пунктов в удалённых районах.</p>
+          <div class="project-figures">
+            <span class="raised num">142 900 ₽</span>
+            <span class="goal num">из 260 000 ₽</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" data-pct="55"></div></div>
+          <div class="project-pct num">55% собрано</div>
+          <button class="btn btn-accent btn-small" data-open-modal="donate">Поддержать</button>
+        </article>
+
+        <article class="project-card" data-reveal>
+          <h3>Учебный год</h3>
+          <p class="desc">Школьные принадлежности и учебники для 140 детей из малообеспеченных семей перед началом учебного года.</p>
+          <div class="project-figures">
+            <span class="raised num">96 700 ₽</span>
+            <span class="goal num">из 120 000 ₽</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" data-pct="81"></div></div>
+          <div class="project-pct num">81% собрано</div>
+          <button class="btn btn-accent btn-small" data-open-modal="donate">Поддержать</button>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. КУДА ИДУТ ДЕНЬГИ -->
+  <section id="ledger">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <span class="section-kicker">Куда идут деньги</span>
+        <h2>Ведомость распределения средств</h2>
+      </div>
+      <div class="ledger" data-reveal>
+        <div class="ledger-row">
+          <span class="ledger-label">Прямая помощь</span>
+          <span class="ledger-dots"></span>
+          <span class="ledger-value num">92%</span>
+        </div>
+        <div class="ledger-row">
+          <span class="ledger-label">Логистика и доставка</span>
+          <span class="ledger-dots"></span>
+          <span class="ledger-value num">5%</span>
+        </div>
+        <div class="ledger-row">
+          <span class="ledger-label">Административные расходы</span>
+          <span class="ledger-dots"></span>
+          <span class="ledger-value num">3%</span>
+        </div>
+        <p class="ledger-note">Полный отчёт с разбивкой по проектам, датам и подтверждающими документами публикуется ежеквартально и доступен по запросу.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. КАК ПОМОЧЬ -->
+  <section id="help">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <span class="section-kicker">Как помочь</span>
+        <h2>Выберите удобный формат участия</h2>
+      </div>
+      <div class="help-grid">
+
+        <div class="help-card" data-reveal>
+          <span class="help-tag">Разово</span>
+          <h3>Разовый взнос</h3>
+          <p>Единовременное пожертвование на выбранный проект или на общий фонд, если вам не важна конкретная цель.</p>
+          <button class="btn btn-primary btn-small" data-open-modal="donate">Сделать взнос</button>
+        </div>
+
+        <div class="help-card" data-reveal>
+          <span class="help-tag">Регулярно</span>
+          <h3>Ежемесячная подписка</h3>
+          <p>Небольшая регулярная сумма, которая помогает фонду планировать помощь заранее, а не реагировать постфактум.</p>
+          <button class="btn btn-primary btn-small" data-open-modal="subscribe">Оформить подписку</button>
+        </div>
+
+        <div class="help-card" data-reveal>
+          <span class="help-tag">Не деньгами</span>
+          <h3>Помощь вещами</h3>
+          <p>Приём одежды, инструментов и других материальных вещей в пунктах приёма партнёров — уточните список у координатора.</p>
+          <button class="btn btn-ghost btn-small" data-open-modal="goods">Узнать подробнее</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site" id="siteFooter">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="#top" class="brand"><span class="stamp-slot"></span>Живой фонд</a>
+        <p style="margin-top:14px;">Открытая платформа благотворительной помощи с полной прослеживаемостью пожертвований.</p>
+      </div>
+      <div>
+        <h3>Разделы</h3>
+        <ul class="footer-links">
+          <li><a href="#about">О фонде</a></li>
+          <li><a href="#projects">Текущие проекты</a></li>
+          <li><a href="#ledger">Куда идут деньги</a></li>
+          <li><a href="#help">Как помочь</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Контакты</h3>
+        <ul class="footer-links">
+          <li><a href="mailto:info@zhivoy-fond.example">info@zhivoy-fond.example</a></li>
+          <li><a href="tel:+70000000000">+7 (000) 000-00-00</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="age-gate" id="ageGate">
+      <input type="checkbox" id="ageCheckbox">
+      <label for="ageCheckbox">Мне есть 18 лет, и я ознакомлен(а) с тем, что все переводы на этом сайте являются демонстрационными.</label>
+    </div>
+
+    <div class="disclaimer">
+      <span>© 2026 «Живой фонд». Прототип продукта — реальные платежи не проводятся.</span>
+      <span>Раздел «Куда идут деньги» основан на демонстрационных данных.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Demo transfer modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" id="modalClose" aria-label="Закрыть">×</button>
+    <span class="stamp-slot"></span>
+    <h3 id="modalTitle">Демонстрационный перевод</h3>
+    <p id="modalText">Это прототип: реальный платёж не выполняется. В продакшн-версии здесь будет форма перевода с выбором суммы и подтверждением возраста.</p>
+    <div class="modal-actions">
+      <button class="btn btn-primary" id="modalOk">Понятно</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  // Insert verification stamp into every slot
+  var tpl = document.getElementById('stamp-svg');
+  document.querySelectorAll('.stamp-slot').forEach(function (slot) {
+    slot.replaceWith(tpl.content.cloneNode(true));
+  });
+
+  // Mobile nav toggle
+  var header = document.getElementById('siteHeader');
+  var navToggle = document.getElementById('navToggle');
+  navToggle.addEventListener('click', function () {
+    header.classList.toggle('menu-open');
+  });
+  document.querySelectorAll('.nav-links a').forEach(function (a) {
+    a.addEventListener('click', function () { header.classList.remove('menu-open'); });
+  });
+
+  // Animated total counter
+  var totalAmountEl = document.getElementById('totalAmount');
+  var totalDonorsEl = document.getElementById('totalDonors');
+  var TOTAL_TARGET = 558000;
+  var DONORS_TARGET = 1247;
+
+  function animateNumber(el, target, suffix, duration) {
+    var start = performance.now();
+    function tick(now) {
+      var progress = Math.min((now - start) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var value = Math.round(target * eased);
+      el.firstChild.textContent = value.toLocaleString('ru-RU');
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function runCounters() {
+    if (prefersReducedMotion) {
+      totalAmountEl.firstChild.textContent = TOTAL_TARGET.toLocaleString('ru-RU');
+      totalDonorsEl.textContent = DONORS_TARGET.toLocaleString('ru-RU');
+      return;
+    }
+    animateNumber(totalAmountEl, TOTAL_TARGET, ' ₽', 1400);
+    var start = performance.now();
+    function tickDonors(now) {
+      var progress = Math.min((now - start) / 1400, 1);
+      totalDonorsEl.textContent = Math.round(DONORS_TARGET * progress).toLocaleString('ru-RU');
+      if (progress < 1) requestAnimationFrame(tickDonors);
+    }
+    requestAnimationFrame(tickDonors);
+  }
+
+  // Reveal-on-scroll + progress bars + counters, via IntersectionObserver
+  var revealEls = document.querySelectorAll('[data-reveal]');
+  var progressBars = document.querySelectorAll('.progress-fill');
+  var heroTriggered = false;
+
+  if ('IntersectionObserver' in window && !prefersReducedMotion) {
+    var revealObserver = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(function (el) { revealObserver.observe(el); });
+
+    var progressObserver = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var bar = entry.target;
+          bar.style.width = bar.dataset.pct + '%';
+          obs.unobserve(bar);
+        }
+      });
+    }, { threshold: 0.4 });
+    progressBars.forEach(function (bar) { progressObserver.observe(bar); });
+
+    var heroObserver = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting && !heroTriggered) {
+          heroTriggered = true;
+          runCounters();
+          obs.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+    heroObserver.observe(totalAmountEl);
+  } else {
+    // Reduced motion / no IO support: show everything immediately
+    revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+    progressBars.forEach(function (bar) { bar.style.width = bar.dataset.pct + '%'; });
+    runCounters();
+  }
+
+  // Demo modal
+  var overlay = document.getElementById('modalOverlay');
+  var modalTitle = document.getElementById('modalTitle');
+  var modalText = document.getElementById('modalText');
+  var ageGate = document.getElementById('ageGate');
+  var ageCheckbox = document.getElementById('ageCheckbox');
+
+  var modalCopy = {
+    donate: {
+      title: 'Демонстрационный перевод',
+      text: 'Это прототип: реальный платёж не выполняется. В продакшн-версии здесь будет форма перевода с выбором суммы и подтверждением возраста.'
+    },
+    subscribe: {
+      title: 'Демонстрационная подписка',
+      text: 'В прототипе оформление регулярного платежа — заглушка. В продакшн-версии подписка будет подключена через платёжного провайдера.'
+    },
+    goods: {
+      title: 'Помощь вещами',
+      text: 'Список нужных вещей и адреса пунктов приёма публикует партнёр на месте. В прототипе этот раздел — заглушка для будущей интеграции.'
+    }
+  };
+
+  function openModal(kind) {
+    if (!ageCheckbox.checked) {
+      ageGate.classList.add('attn');
+      ageGate.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
+      setTimeout(function () { ageGate.classList.remove('attn'); }, 1800);
+      return;
+    }
+    var copy = modalCopy[kind] || modalCopy.donate;
+    modalTitle.textContent = copy.title;
+    modalText.textContent = copy.text;
+    overlay.classList.add('open');
+  }
+
+  document.querySelectorAll('[data-open-modal]').forEach(function (btn) {
+    btn.addEventListener('click', function () { openModal(btn.dataset.openModal); });
+  });
+
+  document.getElementById('modalClose').addEventListener('click', function () { overlay.classList.remove('open'); });
+  document.getElementById('modalOk').addEventListener('click', function () { overlay.classList.remove('open'); });
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) overlay.classList.remove('open'); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') overlay.classList.remove('open'); });
+})();
+</script>
+
+</body>
+</html>
